@@ -1,0 +1,201 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[] = "Hello World";
+    int i;
+
+    printf("Original String: %s\n", str);
+
+    printf("After XOR with 0: ");
+    for(i = 0; i < strlen(str); i++) {
+        printf("%c", str[i] ^ 0);
+    }
+
+    return 0;
+}
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[] = "Hello World";
+    int i;
+
+    printf("Original String : %s\n", str);
+
+    printf("After AND with 127 : ");
+    for(i = 0; i < strlen(str); i++) {
+        printf("%c", str[i] & 127);
+    }
+
+    printf("\n");
+
+    printf("After XOR with 127 : ");
+    for(i = 0; i < strlen(str); i++) {
+        printf("%c", str[i] ^ 127);
+    }
+
+    return 0;
+}
+
+import java.util.Scanner;
+
+public class CaesarCipher {
+
+    public static String encrypt(String text, int key) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+
+            if (Character.isUpperCase(ch))
+                ch = (char)((ch - 'A' + key) % 26 + 'A');
+            else if (Character.isLowerCase(ch))
+                ch = (char)((ch - 'a' + key) % 26 + 'a');
+
+            result.append(ch);
+        }
+        return result.toString();
+    }
+
+    public static String decrypt(String text, int key) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+
+            if (Character.isUpperCase(ch))
+                ch = (char)((ch - 'A' - key + 26) % 26 + 'A');
+            else if (Character.isLowerCase(ch))
+                ch = (char)((ch - 'a' - key + 26) % 26 + 'a');
+
+            result.append(ch);
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Plain Text: ");
+        String text = sc.nextLine();
+
+        System.out.print("Enter Key: ");
+        int key = sc.nextInt();
+
+        String cipher = encrypt(text, key);
+
+        System.out.println("Encrypted Text: " + cipher);
+        System.out.println("Decrypted Text: " + decrypt(cipher, key));
+    }
+}
+
+import java.util.Scanner;
+
+public class SubstitutionCipher {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String a = "abcdefghijklmnopqrstuvwxyz";
+        String b = "zyxwvutsrqponmlkjihgfedcba";
+
+        System.out.print("Enter String: ");
+        String str = sc.nextLine();
+
+        String encrypt = "";
+
+        for(int i = 0; i < str.length(); i++) {
+
+            char c = str.charAt(i);
+
+            int j = a.indexOf(c);
+
+            if(j != -1)
+                encrypt += b.charAt(j);
+            else
+                encrypt += c;
+        }
+
+        System.out.println("Encrypted Text: " + encrypt);
+    }
+}
+
+import java.util.Scanner;
+
+public class HillCipher {
+
+    static int[][] key = {
+        {3, 3},
+        {2, 5}
+    };
+
+    static int[][] inverseKey = {
+        {15, 17},
+        {20, 9}
+    };
+
+    public static String encrypt(String text) {
+
+        text = text.toUpperCase();
+
+        if (text.length() % 2 != 0)
+            text += "X";
+
+        StringBuilder cipher = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i += 2) {
+
+            int a = text.charAt(i) - 'A';
+            int b = text.charAt(i + 1) - 'A';
+
+            int c1 = (key[0][0] * a + key[0][1] * b) % 26;
+            int c2 = (key[1][0] * a + key[1][1] * b) % 26;
+
+            cipher.append((char) (c1 + 'A'));
+            cipher.append((char) (c2 + 'A'));
+        }
+
+        return cipher.toString();
+    }
+
+    public static String decrypt(String cipher) {
+
+        StringBuilder text = new StringBuilder();
+
+        for (int i = 0; i < cipher.length(); i += 2) {
+
+            int a = cipher.charAt(i) - 'A';
+            int b = cipher.charAt(i + 1) - 'A';
+
+            int p1 = (inverseKey[0][0] * a + inverseKey[0][1] * b) % 26;
+            int p2 = (inverseKey[1][0] * a + inverseKey[1][1] * b) % 26;
+
+            text.append((char) (p1 + 'A'));
+            text.append((char) (p2 + 'A'));
+        }
+
+        return text.toString();
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter Plain Text: ");
+        String plain = sc.nextLine();
+
+        String cipher = encrypt(plain);
+
+        System.out.println("Encrypted Text: " + cipher);
+
+        String original = decrypt(cipher);
+
+        System.out.println("Decrypted Text: " + original);
+
+        sc.close();
+    }
+}
